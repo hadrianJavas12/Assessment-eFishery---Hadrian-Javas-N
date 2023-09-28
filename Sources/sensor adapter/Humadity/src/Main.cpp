@@ -18,7 +18,7 @@ int deliveryIntervalTime = 100; // interval waktu mengirimkan data dalam milidet
 
 #include "Sensor.h"
 
-Sensor analogSensor(sensorName,unit, m, C, err_measure,err_estimate, q);
+Sensor dhtSensor(sensorName,unit, m, C, err_measure,err_estimate, q);
 
 #include <SoftwareSerial.h>
 SoftwareSerial mySerial(3, 2); // RX, TX
@@ -35,7 +35,7 @@ void setup() {
   //inisialisasi program
   mySerial.begin(9600);
   Serial.begin(9600);
-  analogSensor.SetRawValue(analogRead(sensorPin));
+  dhtSensor.SetRawValue(dht11.readHumidity());
     xTaskCreate(
     taskSendSensorData
     ,  "taskSendSensorData"  
@@ -45,13 +45,13 @@ void setup() {
     ,  NULL );
   Serial.println(F("______________________________________________"));
   Serial.println(F("Sensor Parameter"));
-  Serial.println(analogSensor.GetSensorFullParam());
+  Serial.println(dhtSensor.GetSensorFullParam());
   Serial.println(F("______________________________________________"));
 }
 
 void loop() {
   //memperbaharui nilai sensor
-  analogSensor.UpdateRawValue(dht11.readHumidity());
+  dhtSensor.UpdateRawValue(dht11.readHumidity());
 }
 
 //scheduler untuk mengirim data setiap <deliveryIntervalTime> milli detik
@@ -60,7 +60,7 @@ void taskSendSensorData(void *pvParameters)
   (void) pvParameters;
   for (;;)
   {
-    mySerial.println(analogSensor.GetSensorInfo());
+    mySerial.println(dhtSensor.GetSensorInfo());
     vTaskDelay(deliveryIntervalTime/portTICK_PERIOD_MS); 
   }
 }
