@@ -2,7 +2,7 @@
 #include <Arduino_FreeRTOS.h>
 
 //ADAPTER INFORMATION
-String sensorName = "Intesitas Cahaya";  //nama sensor
+String sensorName = "Kecerahan";  //nama sensor
 String unit = "lux";    //satuan pengukuran sensor
 double m = -2.94;   //kemiringan pada perasamaan linear  Y= m*x + C
 double C = 2400.2;  //koefisien pada perasamaan linear  Y= m*x + C
